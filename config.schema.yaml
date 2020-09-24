@@ -1,0 +1,13 @@
+snow_url:
+  description: "The URL of your SNOW Instance"
+  type: "string"
+  required: true
+snow_username:
+  description: "The username for your SNOW Instance"
+  type: "string"
+  required: true
+snow_password:
+  description: "The password for your SNOW Username"
+  type: "string"
+  required: true
+  secret: true

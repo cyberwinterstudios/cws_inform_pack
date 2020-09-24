@@ -2,12 +2,10 @@ import requests
 import pendulum
 from urllib.parse import urljoin
 
-# from st2common.runners.base_action import Action
-from st2client.client import Client
-from st2client.models import KeyValuePair
+from st2common.runners.base_action import Action
 
 
-class UpdateInventory():
+class UpdateInventory(Action):
 
     def request(self, method, endpoint, **kwargs):
         while(endpoint.startswith("/")):
@@ -16,11 +14,6 @@ class UpdateInventory():
         response = self.s.request(method=method, url=urljoin(self.base_url, endpoint), **kwargs)
         response.raise_for_status()
         return response
-
-    def get_snow_password(self):
-        client = Client('https://stackstorm.thecyberbutler.io',)
-        snow_password = client.keys.get_by_name(name='snow_password', secret=True)
-        return snow_password
 
     def convert_to_ints(self, d):
         for key in d:
@@ -74,9 +67,13 @@ class UpdateInventory():
         return latest_record
 
     def run(self, sys_id):
+        snow_url = self.config['update_inventory']['snow_url']
+        snow_username = self.config['update_inventory']['snow_username']
+        snow_password = self.config['update_inventory']['snow_password']
+
         self.s = requests.session()
-        self.base_url = "https://dev92417.service-now.com/api/now/"
-        self.s.auth = ("admin", self.get_snow_password())
+        self.base_url = urljoin(snow_url, "/api/now/")
+        self.s.auth = (snow_username, snow_password)
 
         adjustment_record = self.request('get', f'table/u_inventory_adjustment/{sys_id}').json()["result"]
         adjustment_record = self.convert_to_ints(adjustment_record)
