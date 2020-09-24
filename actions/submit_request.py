@@ -18,7 +18,7 @@ class SubmitRequest(Action):
         self.s.auth = (self.snow_username, self.snow_password)
 
     def request(self, method, endpoint, **kwargs):
-        while(endpoint.startswith("/")):
+        while endpoint.startswith("/"):
             endpoint.lstrip("/")
 
         response = self.s.request(method=method, url=urljoin(self.base_url, endpoint), **kwargs)
@@ -109,11 +109,12 @@ class SubmitRequest(Action):
         p_end_date = pendulum.parse(end_date)
 
         params = {
-            "sysparm_query": f"u_date>=javascript:gs.dateGenerate('{start_date}', 'end')^ORDERBYDESCu_date",
+            "sysparm_query": f'u_dateBETWEENjavascript:gs.dateGenerate("{start_date}", "end")@javascript:gs.dateGenerate("{end_date}", "end")^ORDERBYu_date',
         }
 
         inventory_records = self.request('get', f'table/u_daily_inventory', params=params).json()["result"]
 
+        oldest_record = None
         oldest_record_date = None
         for record in inventory_records:
             record = self.convert_to_ints(record)
@@ -123,10 +124,10 @@ class SubmitRequest(Action):
             if date <= p_end_date:
                 record['u_planes'] -= request_record['u_planes']
                 record['u_airmen'] -= request_record['u_airmen']
-            oldest_record = self.request('patch', f'table/u_daily_inventory/{record["sys_id"]}', json=record)
+            oldest_record = self.request('patch', f'table/u_daily_inventory/{record["sys_id"]}', json=record).json()
             oldest_record_date = date
 
-        if not oldest_record_date or oldest_record_date <= p_end_date:
+        if not oldest_record_date or oldest_record_date < p_end_date:
             oldest_params = {
                 "sysparm_limit": 1,
                 "sysparm_query": "ORDERBYDESCu_date"
@@ -135,7 +136,5 @@ class SubmitRequest(Action):
             oldest_record = self.convert_to_ints(oldest_records[0])
             oldest_record = self.fill_in_inventory(oldest_record, start_date, end_date, request_record['u_planes'],
                                                    request_record['u_missiles'], request_record['u_airmen'])
-
-
 
         return oldest_record
