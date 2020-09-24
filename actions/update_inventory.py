@@ -7,6 +7,16 @@ from st2common.runners.base_action import Action
 
 class UpdateInventory(Action):
 
+    def __init__(self, *args, **kwargs):
+        super(UpdateInventory, self).__init__(*args, **kwargs)
+        self.snow_url = self.config['snow_url']
+        self.snow_username = self.config['snow_username']
+        self.snow_password = self.config['snow_password']
+        self.s = requests.session()
+        self.base_url = urljoin(self.snow_url, "/api/now/")
+
+        self.s.auth = (self.snow_username, self.snow_password)
+
     def request(self, method, endpoint, **kwargs):
         while(endpoint.startswith("/")):
             endpoint.lstrip("/")
@@ -67,13 +77,6 @@ class UpdateInventory(Action):
         return latest_record
 
     def run(self, sys_id):
-        snow_url = self.config['snow_url']
-        snow_username = self.config['snow_username']
-        snow_password = self.config['snow_password']
-
-        self.s = requests.session()
-        self.base_url = urljoin(snow_url, "/api/now/")
-        self.s.auth = (snow_username, snow_password)
 
         adjustment_record = self.request('get', f'table/u_inventory_adjustment/{sys_id}').json()["result"]
         adjustment_record = self.convert_to_ints(adjustment_record)

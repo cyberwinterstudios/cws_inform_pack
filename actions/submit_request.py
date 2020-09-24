@@ -5,7 +5,17 @@ from urllib.parse import urljoin
 from st2common.runners.base_action import Action
 
 
-class UpdateInventory(Action):
+class SubmitRequest(Action):
+
+    def __init__(self, *args, **kwargs):
+        super(SubmitRequest, self).__init__(*args, **kwargs)
+        self.snow_url = self.config['snow_url']
+        self.snow_username = self.config['snow_username']
+        self.snow_password = self.config['snow_password']
+        self.s = requests.session()
+        self.base_url = urljoin(self.snow_url, "/api/now/")
+
+        self.s.auth = (self.snow_username, self.snow_password)
 
     def request(self, method, endpoint, **kwargs):
         while(endpoint.startswith("/")):
@@ -90,13 +100,6 @@ class UpdateInventory(Action):
         return latest_record
 
     def run(self, sys_id):
-        snow_url = self.config['snow_url']
-        snow_username = self.config['snow_username']
-        snow_password = self.config['snow_password']
-
-        self.s = requests.session()
-        self.base_url = urljoin(snow_url, "/api/now/")
-        self.s.auth = (snow_username, snow_password)
 
         request_record = self.request('get', f'table/u_inventory_request/{sys_id}').json()["result"]
         request_record = self.convert_to_ints(request_record)
@@ -120,7 +123,7 @@ class UpdateInventory(Action):
             if date <= p_end_date:
                 record['u_planes'] -= request_record['u_planes']
                 record['u_airmen'] -= request_record['u_airmen']
-            self.request('patch', f'table/u_daily_inventory/{record["sys_id"]}', json=record)
+            oldest_record = self.request('patch', f'table/u_daily_inventory/{record["sys_id"]}', json=record)
             oldest_record_date = date
 
         if not oldest_record_date or oldest_record_date <= p_end_date:
