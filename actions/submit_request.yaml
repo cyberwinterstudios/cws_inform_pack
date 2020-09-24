@@ -1,0 +1,10 @@
+name: "submit_request"
+runner_type: "python-script"
+description: "Submits request for Inventory"
+enabled: true
+entry_point: "submit_request.py"
+parameters:
+    sys_id:
+        type: "string"
+        required: true
+        position: 0
