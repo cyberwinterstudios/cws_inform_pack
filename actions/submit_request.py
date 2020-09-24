@@ -113,6 +113,7 @@ class UpdateInventory(Action):
 
         oldest_record_date = None
         for record in inventory_records:
+            record = self.convert_to_ints(record)
             date = pendulum.parse(record['u_date'])
             record['u_missiles'] -= request_record['u_missiles']
             record['u_total_missiles'] -= request_record['u_missiles']
