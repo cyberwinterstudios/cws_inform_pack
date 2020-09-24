@@ -101,8 +101,9 @@ class UpdateInventory(Action):
         request_record = self.request('get', f'table/u_inventory_request/{sys_id}').json()["result"]
         request_record = self.convert_to_ints(request_record)
 
-        start_date = pendulum.parse(request_record['u_start_date'])
-        end_date = pendulum.parse(request_record['u_end_date'])
+        start_date = request_record['u_start_date']
+        end_date = request_record['u_end_date']
+        p_end_date = pendulum.parse(end_date)
 
         params = {
             "sysparm_query": f"u_date>=javascript:gs.dateGenerate('{start_date}', 'end')^ORDERBYDESCu_date",
@@ -115,13 +116,13 @@ class UpdateInventory(Action):
             date = pendulum.parse(record['u_date'])
             record['u_missiles'] -= request_record['u_missiles']
             record['u_total_missiles'] -= request_record['u_missiles']
-            if date <= end_date:
+            if date <= p_end_date:
                 record['u_planes'] -= request_record['u_planes']
                 record['u_airmen'] -= request_record['u_airmen']
             self.request('patch', f'table/u_daily_inventory/{record["sys_id"]}', json=record)
             oldest_record_date = date
 
-        if not oldest_record_date or oldest_record_date <= end_date:
+        if not oldest_record_date or oldest_record_date <= p_end_date:
             oldest_params = {
                 "sysparm_limit": 1,
                 "sysparm_query": "ORDERBYDESCu_date"
