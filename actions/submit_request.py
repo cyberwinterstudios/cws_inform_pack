@@ -80,6 +80,7 @@ class SubmitRequest(Action):
                 "u_total_planes": oldest_total_planes,
                 "u_total_airmen": oldest_total_airmen
             }
+            self.request('post', 'table/u_daily_inventory', json=data).json()
             inventory_date = inventory_date.add(days=1)
 
         if mission_started:
