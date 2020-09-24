@@ -1,0 +1,19 @@
+name: "inventory_adjustment_submitted"
+pack: "cws_inform"
+description: "Receive incoming webhook when inventory adjustment submitted"
+enabled: true
+
+trigger:
+    type: "core.st2.webhook"
+    parameters:
+        url: "snow/inventory_request"
+
+criteria:
+    trigger.body.name:
+        type: "equals"
+        pattern: "inventory_adjustment"
+
+action:
+    ref: "cws_inform.update_inventory"
+    parameters:
+        sys_id: "{{trigger.body.sys_id}}"

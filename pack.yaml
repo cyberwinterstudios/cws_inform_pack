@@ -1,0 +1,14 @@
+ref: cws_inform
+name: CWS Inform
+description: All info required for the CWS Inform Use Cases
+keywords:
+  - cws
+  - inform
+  - readiness
+version: 0.1.0
+python_versions:
+  - "3"
+dependencies:
+  - core
+author: Michael Butler
+email: michael@cyberwinterstudios.com
