@@ -67,11 +67,9 @@ class UpdateInventory(Action):
         return latest_record
 
     def run(self, sys_id):
-        print(self.config)
-
-        snow_url = self.config['update_inventory']['snow_url']
-        snow_username = self.config['update_inventory']['snow_username']
-        snow_password = self.config['update_inventory']['snow_password']
+        snow_url = self.config['snow_url']
+        snow_username = self.config['snow_username']
+        snow_password = self.config['snow_password']
 
         self.s = requests.session()
         self.base_url = urljoin(snow_url, "/api/now/")
