@@ -16,13 +16,13 @@ aws_access_key_id:
     type: "string"
     secret: true
     required: true
-  aws_secret_access_key:
-    description: "AWS access secret to use."
-    type: "string"
-    secret: true
-    required: true
-  region:
-    description: "AWS region to use."
-    type: "string"
-    required: true
-    default: 'us-gov-west-1'
+aws_secret_access_key:
+  description: "AWS access secret to use."
+  type: "string"
+  secret: true
+  required: true
+region:
+  description: "AWS region to use."
+  type: "string"
+  required: true
+  default: 'us-gov-west-1'
