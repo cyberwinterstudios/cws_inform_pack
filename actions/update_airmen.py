@@ -14,14 +14,14 @@ def extract_zip(zip_file):
     return [{"filename": name, "file": input_zip.read(name).decode("utf-8-sig")} for name in input_zip.namelist()]
 
 field_map = {
-    "AirmanId": "u_id",
+    "AirmanId": "u_airman_id",
     "MedicalComplete": "u_medical_completed_on",
     "MedicalDue": "u_medical_due_on",
     "MedicalScheduled": "u_medical_scheduled_on",
     "CbrneComplete": "u_cbrne_completed_on",
     "CbrneDue": "u_cbrne_due_dn",
     "CbrneScheduled": "u_cbrne_scheduled_on",
-    "XYZ": "u_id",
+    "XYZ": "u_airman_id",
     "ABC123": "u_afsc_completed_on",
     "DEF456": "u_afsc_due_on",
     "ABC456": "u_afsc_scheduled_on",
@@ -34,7 +34,7 @@ field_map = {
     "Wing": "u_wing",
     "Flight Group": "u_flight_group",
     "Squadron": "u_squadron",
-    "Name": "u_name"
+    "Name": "u_airman_name"
 }
 
 
