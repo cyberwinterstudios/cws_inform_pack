@@ -1,8 +1,8 @@
 name: "update_readiness"
 runner_type: "python-script"
-description: "Updates Inventory Totals for assets"
+description: "Updates Readiness Calculation"
 enabled: true
-entry_point: "update_inventory.py"
+entry_point: "update_readiness.py"
 parameters:
     sys_id:
         type: "string"
