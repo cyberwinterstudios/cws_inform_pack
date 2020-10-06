@@ -84,7 +84,10 @@ class UpdateAirmen(Action):
             if f['LastModified'] > last_check_time:
                 file_response = self.s3_client.get_object(Bucket="readiness-files", Key=f["Key"])
                 file_contents = BytesIO(file_response['Body'].read())
-                # self.action_service.set_value(name="s3_check_time", value=f['LastModified'].isoformat())
+                try:
+                    self.action_service.set_value(name="s3_check_time", value=f['LastModified'].isoformat())
+                except:
+                    pass
 
                 zipped_files = extract_zip(file_contents)
                 for zf in zipped_files:
