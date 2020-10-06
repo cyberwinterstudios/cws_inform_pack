@@ -7,7 +7,7 @@ trigger:
     type: "core.st2.CronTimer"
     parameters:
         timezone: "UTC"
-        minute: "*/5"
+        minute: "*"
 
 action:
     ref: "cws_inform.update_airmen"
