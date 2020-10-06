@@ -1,0 +1,19 @@
+name: "airmen_readiness_updated"
+pack: "cws_inform"
+description: "Receive incoming webhook when readiness dates are updated"
+enabled: true
+
+trigger:
+    type: "core.st2.webhook"
+    parameters:
+        url: "snow/readiness_update"
+
+criteria:
+    trigger.body.name:
+        type: "equals"
+        pattern: "readiness_update"
+
+action:
+    ref: "cws_inform.update_readiness"
+    parameters:
+        sys_id: "{{trigger.body.sys_id}}"

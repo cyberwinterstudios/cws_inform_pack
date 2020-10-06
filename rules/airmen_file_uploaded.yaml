@@ -1,0 +1,19 @@
+name: "airmen_file_uploaded"
+pack: "cws_inform"
+description: "Receive incoming webhook when readiness files uploaded to S3"
+enabled: true
+
+trigger:
+    type: "core.st2.webhook"
+    parameters:
+        url: "new_readiness_files"
+
+criteria:
+    trigger.body.source:
+        type: "equals"
+        pattern: "aws:s3"
+
+action:
+    ref: "cws_inform.update_readiness"
+    parameters:
+        file_name: "{{trigger.body.payload.object.key}}"

@@ -1,0 +1,10 @@
+name: "update_readiness"
+runner_type: "python-script"
+description: "Updates Inventory Totals for assets"
+enabled: true
+entry_point: "update_inventory.py"
+parameters:
+    sys_id:
+        type: "string"
+        required: true
+        position: 0
