@@ -12,10 +12,10 @@ snow_password:
   required: true
   secret: true
 aws_access_key_id:
-    description: "AWS access key to use."
-    type: "string"
-    secret: true
-    required: true
+  description: "AWS access key to use."
+  type: "string"
+  secret: true
+  required: true
 aws_secret_access_key:
   description: "AWS access secret to use."
   type: "string"
