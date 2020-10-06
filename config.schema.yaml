@@ -11,3 +11,18 @@ snow_password:
   type: "string"
   required: true
   secret: true
+aws_access_key_id:
+    description: "AWS access key to use."
+    type: "string"
+    secret: true
+    required: true
+  aws_secret_access_key:
+    description: "AWS access secret to use."
+    type: "string"
+    secret: true
+    required: true
+  region:
+    description: "AWS region to use."
+    type: "string"
+    required: true
+    default: 'us-gov-west-1'

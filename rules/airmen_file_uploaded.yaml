@@ -4,16 +4,10 @@ description: "Receive incoming webhook when readiness files uploaded to S3"
 enabled: true
 
 trigger:
-    type: "core.st2.webhook"
+    type: "core.st2.CronTimer"
     parameters:
-        url: "new_readiness_files"
-
-criteria:
-    trigger.body.source:
-        type: "equals"
-        pattern: "aws:s3"
+        timezone: "UTC"
+        minute: "*/5"
 
 action:
-    ref: "cws_inform.update_readiness"
-    parameters:
-        file_name: "{{trigger.body.payload.object.key}}"
+    ref: "cws_inform.update_airmen"

@@ -1,0 +1,10 @@
+name: "update_airmen"
+runner_type: "python-script"
+description: "Updates Airmen Information"
+enabled: true
+entry_point: "update_airmen.py"
+parameters:
+    sys_id:
+        type: "string"
+        required: true
+        position: 0

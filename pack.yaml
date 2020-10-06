@@ -5,11 +5,10 @@ keywords:
   - cws
   - inform
   - readiness
-version: 0.3.0
+version: 0.3.1
 python_versions:
   - "3"
 dependencies:
   - core
-  - aws_s3
 author: Michael Butler
 email: michael@cyberwinterstudios.com
