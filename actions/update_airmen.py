@@ -14,14 +14,14 @@ def extract_zip(zip_file):
     return [{"filename": name, "file": input_zip.read(name).decode("utf-8-sig")} for name in input_zip.namelist()]
 
 field_map = {
-    "AirmanId": "u_airman_id",
+    "AirmanId": "u_airmen_id",
     "MedicalComplete": "u_medical_completed_on",
     "MedicalDue": "u_medical_due_on",
     "MedicalScheduled": "u_medical_scheduled_on",
     "CbrneComplete": "u_cbrne_completed_on",
-    "CbrneDue": "u_cbrne_due_dn",
+    "CbrneDue": "u_cbrne_due_on",
     "CbrneScheduled": "u_cbrne_scheduled_on",
-    "XYZ": "u_airman_id",
+    "XYZ": "u_airmen_id",
     "ABC123": "u_afsc_completed_on",
     "DEF456": "u_afsc_due_on",
     "ABC456": "u_afsc_scheduled_on",
@@ -30,11 +30,11 @@ field_map = {
     "GHI012": "u_fitness_scheduled_on",
     "012ABC": "u_catm_completed_on",
     "345DEF": "u_catm_due_on",
-    "012DEF": "u_catm_scheduled On",
+    "012DEF": "u_catm_scheduled_on",
     "Wing": "u_wing",
     "Flight Group": "u_flight_group",
     "Squadron": "u_squadron",
-    "Name": "u_airman_name"
+    "Name": "u_airmen_name"
 }
 
 
@@ -84,7 +84,7 @@ class UpdateAirmen(Action):
             if f['LastModified'] > last_check_time:
                 file_response = self.s3_client.get_object(Bucket="readiness-files", Key=f["Key"])
                 file_contents = BytesIO(file_response['Body'].read())
-                self.action_service.set_value(name="s3_check_time", value=f['LastModified'].isoformat())
+                # self.action_service.set_value(name="s3_check_time", value=f['LastModified'].isoformat())
 
                 zipped_files = extract_zip(file_contents)
                 for zf in zipped_files:
@@ -114,4 +114,4 @@ class UpdateAirmen(Action):
                                     continue
                                 value = row[key]
                                 data[field_map[key]] = value
-                                airman_record = self.request('post', 'table/u_readiness', json=data).json()['result']
+                            airman_record = self.request('post', 'table/u_readiness', json=data).json()
